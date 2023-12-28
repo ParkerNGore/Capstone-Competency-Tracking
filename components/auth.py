@@ -1,7 +1,8 @@
 import bcrypt
+from main import logged_in_user, cursor
 
 
-def login(cursor, email, password):
+def login(email, password):
     print(' ----- Login ----- ')
 
     user = cursor.execute(
@@ -17,7 +18,13 @@ def login(cursor, email, password):
         return user
 
 
-def login_menu(cursor):
+def update_login(user):
+    global logged_in_user
+    if user[0] == logged_in_user[0]:
+        logged_in_user = user
+
+
+def login_menu():
     print("Please login, to return to the previous menu hit enter instead entering an option.")
 
     while True:
@@ -29,7 +36,7 @@ def login_menu(cursor):
         if password == '':
             break
 
-        user = login(cursor, email, password)
+        user = login(email, password)
 
         if user is not None:
             return user

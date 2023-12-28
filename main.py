@@ -1,5 +1,6 @@
 
 from datetime import date
+import math
 import sqlite3
 from components.auth import login_menu
 from components.manage_users import create_user, hash_password
@@ -12,7 +13,7 @@ cursor = connection.cursor()
 
 
 # Variables
-logged_in_user = {}
+logged_in_user = ()
 
 
 def init():
@@ -26,20 +27,37 @@ def init():
 
 def main_menu():
 
-    if logged_in_user == {}:
+    if logged_in_user == ():
         login_menu(cursor)
 
     while True:
-        print('main menu')
-        # User Menu
+        print('--- Main Menu ---')
         print('1. View Competencies')
         print('2. View User Info')
+        print('3. Logout')
+        print('Press enter to exit.')
+        response = input()
+
+        if not response:
+            break
+        elif math.isnan(response):
+            print(f'Response of: {response} is not valid')
+            continue
+
+        match int(response):
+            case 1:
+                print('1')
+            case 2:
+                print('2')
+            case 3:
+                logged_in_user = ()
+                login_menu(cursor)
 
         break
 
 
 def logout():
-    logged_in = {}
+    logged_in = ()
 
 
 init()
