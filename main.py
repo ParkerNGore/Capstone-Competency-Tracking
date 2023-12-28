@@ -29,10 +29,12 @@ def main_menu():
     if logged_in_user == {}:
         login_menu(cursor)
 
-    # if logged_in_user[9] == 2:
-
     while True:
         print('main menu')
+        # User Menu
+        print('1. View Competencies')
+        print('2. View User Info')
+
         break
 
 
@@ -41,4 +43,4 @@ def logout():
 
 
 init()
-main_menu()
+# main_menu()
