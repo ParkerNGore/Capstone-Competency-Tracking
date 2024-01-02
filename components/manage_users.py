@@ -25,7 +25,7 @@ def user_menu():
                 continue
             match int(response):
                 case 1:
-                    user_info()
+                    user_info(logged_in_user)
                 case 2:
                     print('2')
                 case 3:
@@ -108,14 +108,18 @@ def user_info(user):
 
 
 def update_user(user):
-    query = 'UPDATE Users SET (first_name=?, last_name=?, phone=?, email=?, password=?) WHERE id=?'
-    values = (user[1], user[2],
-              user[3], user[4], user[5])
+    if logged_in_user[9] == 2 or logged_in_user[0] == user[0]:
+        query = 'UPDATE Users SET (first_name=?, last_name=?, phone=?, email=?, password=?) WHERE id=?'
+        values = (user[1], user[2],
+                  user[3], user[4], user[5])
 
-    cursor.execute(query, values)
-    connection.commit()
+        cursor.execute(query, values)
+        connection.commit()
 
-    update_login(user)
+        update_login(user)
+    else:
+        print('You do not have permission to edit this user.')
+        return
 
 
 def create_user(user):

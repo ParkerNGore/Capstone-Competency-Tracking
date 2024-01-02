@@ -1,6 +1,7 @@
+from main import cursor
 
 
-def create_schema(cursor):
+def create_schema():
     cursor.execute('''DROP TABLE IF EXISTS Users''')
     cursor.execute('''CREATE TABLE IF NOT EXISTS Users(
                    id INTEGER PRIMARY KEY,
