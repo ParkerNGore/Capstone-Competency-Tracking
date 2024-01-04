@@ -63,6 +63,16 @@ def get_all_users():
             continue
 
 
+def search_user_by_first_or_last(first_name, last_name):
+    query = '''
+            SELECT * 
+            FROM users 
+            WHERE first_name LIKE ? OR last_name LIKE ?
+            '''
+
+    return cursor.execute(query, (first_name, last_name)).fetchall()
+
+
 def get_user_by_id(id):
     user = cursor.execute('SELECT * FROM Users where id=?', (id)).fetchone()
     if user is not None:
@@ -124,8 +134,8 @@ def update_user(user):
 
 def create_user(user):
 
-    query = 'INSERT INTO Users (id, first_name, last_name, phone, email, password, active, date_created, hire_date, user_type,) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-    values = (user.id, user.first_name, user.last_name, user.phone, user.email, user.password,
+    query = 'INSERT INTO Users (first_name, last_name, phone, email, password, active, date_created, hire_date, user_type,) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    values = (user.first_name, user.last_name, user.phone, user.email, user.password,
               user.active, user.date_created, user.hire_date, user.user_type)
 
     cursor.execute(query, values)

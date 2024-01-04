@@ -4,7 +4,7 @@ from main import cursor
 def create_schema():
     cursor.execute('''DROP TABLE IF EXISTS Users''')
     cursor.execute('''CREATE TABLE IF NOT EXISTS Users(
-                   id INTEGER PRIMARY KEY,
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                    first_name TEXT,
                    last_name TEXT,
                    phone TEXT
@@ -20,14 +20,14 @@ def create_schema():
 
     cursor.execute('''DROP TABLE IF EXISTS Competencies''')
     cursor.execute('''CREATE TABLE IF NOT EXISTS Competencies(
-                   id INTEGER PRIMARY KEY,
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                    name TEXT NOT NULL,
                    date_created TEXT NOT NULL
     )''')
 
     cursor.execute('''DROP TABLE IF EXISTS Assessments''')
     cursor.execute('''CREATE TABLE IF NOT EXISTS Assessments(
-                   id INTEGER PRIMARY KEY,
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                    competency_id INTEGER NOT NULL,
                    name TEXT NOT NULL,
                    date_created TEXT NOT NULL,
@@ -37,7 +37,7 @@ def create_schema():
 
     cursor.execute('''DROP TABLE IF EXISTS Assessment_Results''')
     cursor.execute('''CREATE TABLE IF NOT EXISTS Assessment_Results(
-                   id INTEGER PRIMARY KEY,
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                    assessment_id INTEGER NOT NULL,
                    user_id INTEGER NOT NULL,
                    date_taken TEXT NOT NULL,
