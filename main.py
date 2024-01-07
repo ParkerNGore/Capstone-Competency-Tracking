@@ -2,9 +2,11 @@
 from datetime import date
 import math
 from components.auth import login, logged_in_user
+from components.manage_assessments import add_assessment
 from components.manage_competencies import create_competency, get_all_competencies, view_competencies
 from components.manage_users import create_user, hash_password, user_menu
 from data.create_schema import create_schema
+from models.assessment import Assessment
 from models.competency import Competency
 from models.user import User
 from init import connection
@@ -36,6 +38,11 @@ def init():
     for x in range(len(competency_names)):
         create_competency(Competency(None, competency_names[x], date.today()))
 
+    for x in range(len(competency_names)):
+        add_assessment(Assessment(None, 'Placements', date.today(), None ), x+1)
+        add_assessment(Assessment(None, 'Finals', date.today(), None ), x+1)
+
+
     connection.commit()
 
 
@@ -45,6 +52,8 @@ def main_menu():
         login_menu()
 
     while True:
+        print(logged_in_user)
+
         print('--- Main Menu ---')
         print('1. View Competencies')
         print('2. View User Info')
@@ -86,7 +95,8 @@ def login_menu():
             break
 
         user = login(email, password)
-
+        global logged_in_user
+        logged_in_user = user
         if user is not None:
             return user
 

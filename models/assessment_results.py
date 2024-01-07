@@ -1,7 +1,9 @@
 class Assessment_Results:
-    def __init__(self, id, assessment_id, score, date_taken, manager_id):
+    def __init__(self, id, assessment_id, score, date_taken, manager_id, user_id):
         self.id = id
         self.assessment_id = assessment_id,
         self.score = score,
         self.date_taken = date_taken,
-        self.manager_id = manager_id
+        self.manager_id = manager_id,
+        self.user_id = user_id
+

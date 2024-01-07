@@ -1,14 +1,18 @@
 from init import cursor, connection
 
-from datetime import date
 
+def view_results(assessment_id, user_id):
+     return cursor.execute(
+        'SELECT * FROM AssessmentResults WHERE user_id = ? AND assessment_id = ?',
+        (user_id, assessment_id)
+    ).fetchone()
 
 def add_assessment(assessment, competency_id):
     query = '''
             INSERT INTO assessments (competency_id, name, date_created)
             VALUES (?, ?, ?)
             '''
-    values = (assessment[1], assessment[2], date.today())
+    values = (competency_id, assessment.name[0], assessment.date_created[0])
 
     cursor.execute(query, values)
 

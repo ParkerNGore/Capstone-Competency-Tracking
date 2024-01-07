@@ -3,4 +3,4 @@ class Assessment:
         self.id = id
         self.name = name,
         self.date_created = date_created,
-        self.competency_id = competency_id
+        self.competency_id = competency_id,

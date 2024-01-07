@@ -1,8 +1,9 @@
 
 from datetime import date
 import math
+from components.manage_assessments import view_results
 from init import cursor
-
+from components.auth import logged_in_user
 
 def get_all_competencies():
     return cursor.execute('SELECT * FROM competencies').fetchall()
@@ -20,7 +21,7 @@ def get_competency_by_id(id):
 def get_competency_by_id_with_assessments(id):
     print(id)
     competency = cursor.execute(
-        'SELECT * FROM Competencies c LEFT JOIN assessments a ON c.id = a.competency_id where c.id=?', (id,)).fetchone()
+        'SELECT * FROM Competencies c LEFT JOIN assessments a ON c.id = a.competency_id where c.id=?', (id,)).fetchall()
     if competency is not None:
         return competency
     else:
@@ -66,6 +67,7 @@ def view_competencies():
     while True:
         for i in range(1, len(comeptencies) + 1):
             print(f'{i}. {comeptencies[i - 1][1]}')
+            print(logged_in_user)
 
         print()
         print('Select the corresponding number to view Competency or hit enter to return')
@@ -84,7 +86,27 @@ def view_competencies():
 def view_competency_w_assessments(id):
     competency_with_assessments = get_competency_by_id_with_assessments(id)
     print(competency_with_assessments)
+    while True:
+        print(competency_with_assessments[0][1])
+        print(f'Name Date Created')
+        for i in range(len(competency_with_assessments)):
+            print(f'{i+1}. {competency_with_assessments[i][5]} {competency_with_assessments[i][6]}')
 
+        print()
+        print('Select a number to view your results or hit enter to return')
+        response = input()
+
+        if not response:
+            break
+        elif math.isnan(int(response)):
+            print(f'Response of: {response} is not valid')
+            continue
+        global logged_in_user
+        print(logged_in_user)
+        view_assessment_results(int(response), logged_in_user[0])
+
+def view_assessment_results(id, user_id):
+    print(view_results(id, user_id))
 
 def create_competency(competency):
     query = 'INSERT INTO Competencies (name, date_created) VALUES (?, ?)'

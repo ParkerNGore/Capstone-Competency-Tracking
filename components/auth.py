@@ -17,10 +17,11 @@ def login(email, password):
     result = bcrypt.checkpw(bytes, user[5])
 
     if result:
+        update_login(user)
         return user
 
 
 def update_login(user):
     global logged_in_user
-    if user[0] == logged_in_user[0]:
+    if logged_in_user == () or user[0] == logged_in_user[0]:
         logged_in_user = user
