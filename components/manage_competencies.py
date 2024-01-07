@@ -1,12 +1,26 @@
 
 from datetime import date
-from distutils.errors import CompileError
-from main import cursor
+import math
+from init import cursor
+
+
+def get_all_competencies():
+    return cursor.execute('SELECT * FROM competencies').fetchall()
 
 
 def get_competency_by_id(id):
     competency = cursor.execute(
         'SELECT * FROM Competencies where id=?', (id)).fetchone()
+    if competency is not None:
+        return competency
+    else:
+        return ()
+
+
+def get_competency_by_id_with_assessments(id):
+    print(id)
+    competency = cursor.execute(
+        'SELECT * FROM Competencies c LEFT JOIN assessments a ON c.id = a.competency_id where c.id=?', (id,)).fetchone()
     if competency is not None:
         return competency
     else:
@@ -47,8 +61,34 @@ def get_all_competencies_w_assessment_results_for_all_users():
     result = cursor.execute(query).fetchall()
 
 
+def view_competencies():
+    comeptencies = get_all_competencies()
+    while True:
+        for i in range(1, len(comeptencies) + 1):
+            print(f'{i}. {comeptencies[i - 1][1]}')
+
+        print()
+        print('Select the corresponding number to view Competency or hit enter to return')
+
+        response = input()
+
+        if not response:
+            break
+        elif math.isnan(int(response)):
+            print(f'Response of: {response} is not valid')
+            continue
+
+        view_competency_w_assessments(comeptencies[int(response) - 1][0])
+
+
+def view_competency_w_assessments(id):
+    competency_with_assessments = get_competency_by_id_with_assessments(id)
+    print(competency_with_assessments)
+
+
 def create_competency(competency):
     query = 'INSERT INTO Competencies (name, date_created) VALUES (?, ?)'
-    values = (competency.name, date.today())
+    print(competency.name)
+    values = (competency.name[0], date.today())
 
     cursor.execute(query, values)

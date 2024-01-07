@@ -1,4 +1,4 @@
-from main import cursor, connection
+from init import cursor, connection
 
 from datetime import date
 

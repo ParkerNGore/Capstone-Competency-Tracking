@@ -1,4 +1,4 @@
-from main import cursor
+from init import cursor
 
 
 def create_schema():
