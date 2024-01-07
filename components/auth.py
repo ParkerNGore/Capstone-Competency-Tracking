@@ -1,6 +1,7 @@
 import bcrypt
 from init import cursor
 
+global logged_in_user
 logged_in_user = ()
 
 
@@ -23,5 +24,5 @@ def login(email, password):
 
 def update_login(user):
     global logged_in_user
-    if logged_in_user == () or user[0] == logged_in_user[0]:
+    if logged_in_user == () or logged_in_user == ('test') or user[0] == logged_in_user[0]:
         logged_in_user = user

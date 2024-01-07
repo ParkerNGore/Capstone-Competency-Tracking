@@ -101,7 +101,6 @@ def view_competency_w_assessments(id):
         elif math.isnan(int(response)):
             print(f'Response of: {response} is not valid')
             continue
-        global logged_in_user
         print(logged_in_user)
         view_assessment_results(int(response), logged_in_user[0])
 
