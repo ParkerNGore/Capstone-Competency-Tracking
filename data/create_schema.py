@@ -41,9 +41,12 @@ def create_schema():
                    assessment_id INTEGER NOT NULL,
                    user_id INTEGER NOT NULL,
                    date_taken TEXT NOT NULL,
+                   manager_id INTEGER,
                    score INT NOT NULL,
                    FOREIGN KEY (assessment_id)
                     REFERENCES Assessments (id),
                    FOREIGN KEY (user_id)
+                    REFERENCES Users (id)
+                   FOREIGN KEY (manager_id)
                     REFERENCES Users (id)
     )''')

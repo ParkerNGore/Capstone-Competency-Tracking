@@ -3,7 +3,6 @@ from datetime import date
 import math
 from components.manage_assessments import view_results
 from init import cursor
-from components.auth import logged_in_user
 
 def get_all_competencies():
     return cursor.execute('SELECT * FROM competencies').fetchall()
@@ -53,21 +52,22 @@ def get_all_competencies_w_assessment_results_by_user(user_id):
 
 def get_all_competencies_w_assessment_results_for_all_users():
     query = '''
-    SELECT * 
+    SELECT c.name, a.name, ar.date_taken, ar.score, ar.manager_id, ar.user_id 
     FROM competencies c 
     LEFT JOIN assessments a ON c.id = a.competency_id
     LEFT JOIN assessment_results ar ON a.id = ar.assessment_id
+    WHERE ar.user_id > 0
     ORDER BY ar.user_id
     '''
     result = cursor.execute(query).fetchall()
+    return result
 
 
-def view_competencies():
+def view_competencies(logged_in_user):
     comeptencies = get_all_competencies()
     while True:
         for i in range(1, len(comeptencies) + 1):
             print(f'{i}. {comeptencies[i - 1][1]}')
-            print(logged_in_user)
 
         print()
         print('Select the corresponding number to view Competency or hit enter to return')
@@ -80,10 +80,10 @@ def view_competencies():
             print(f'Response of: {response} is not valid')
             continue
 
-        view_competency_w_assessments(comeptencies[int(response) - 1][0])
+        view_competency_w_assessments(comeptencies[int(response) - 1][0], logged_in_user)
 
 
-def view_competency_w_assessments(id):
+def view_competency_w_assessments(id, logged_in_user):
     competency_with_assessments = get_competency_by_id_with_assessments(id)
     print(competency_with_assessments)
     while True:
@@ -101,7 +101,6 @@ def view_competency_w_assessments(id):
         elif math.isnan(int(response)):
             print(f'Response of: {response} is not valid')
             continue
-        print(logged_in_user)
         view_assessment_results(int(response), logged_in_user[0])
 
 def view_assessment_results(id, user_id):
@@ -109,7 +108,6 @@ def view_assessment_results(id, user_id):
 
 def create_competency(competency):
     query = 'INSERT INTO Competencies (name, date_created) VALUES (?, ?)'
-    print(competency.name)
     values = (competency.name[0], date.today())
 
     cursor.execute(query, values)

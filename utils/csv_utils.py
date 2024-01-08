@@ -1,6 +1,8 @@
 import csv
+from components.manage_assessments import add_results
 
 from models.assessment_results import Assessment_Results
+from init import cursor, connection
 
 
 def write_to_csv(headers, data, filename="output.csv"):
@@ -20,14 +22,16 @@ def read_assessment_results(filename):
         reader = csv.reader(csvfile)
         next(reader, None)
         for row in reader:
+            competency_id = cursor.execute('SELECT id FROM competencies WHERE name = ?', (row[0],)).fetchone()
+            assessment_id = cursor.execute('SELECT id FROM assessments WHERE competency_id = ? and name = ?', (competency_id[0], row[1])).fetchone()
+
             assessment_result = Assessment_Results(
-                None, row[0], row[1], row[2], row[3])
+                competency_id, assessment_id, row[3], row[2], row[4], row[5])
             assessment_results.append(assessment_result)
+            
+        for i in assessment_results:
+            print(i)
+            add_results(i)
+            connection.commit()
 
     return assessment_results
-
-
-assessment_results_list = read_csv_to_model('input.csv')
-
-for ar in assessment_results_list:
-    print(vars(ar))

@@ -2,14 +2,15 @@
 from datetime import date
 import math
 from components.auth import login, logged_in_user
-from components.manage_assessments import add_assessment
+from components.manage_assessments import add_assessment, add_results
 from components.manage_competencies import create_competency, get_all_competencies, view_competencies
 from components.manage_users import create_user, hash_password, user_menu
 from data.create_schema import create_schema
 from models.assessment import Assessment
+from models.assessment_results import Assessment_Results
 from models.competency import Competency
 from models.user import User
-from init import connection
+from init import connection, cursor
 
 
 def init():
@@ -42,7 +43,6 @@ def init():
         add_assessment(Assessment(None, 'Placements', date.today(), None ), x+1)
         add_assessment(Assessment(None, 'Finals', date.today(), None ), x+1)
 
-
     connection.commit()
 
 
@@ -52,8 +52,6 @@ def main_menu():
         login_menu()
 
     while True:
-        print(logged_in_user)
-
         print('--- Main Menu ---')
         print('1. View Competencies')
         print('2. View User Info')
@@ -69,14 +67,13 @@ def main_menu():
 
         match int(response):
             case 1:
-                view_competencies()
+                view_competencies(logged_in_user)
             case 2:
-                user_menu()
+                user_menu(logged_in_user)
             case 3:
                 logged_in_user = ()
-                login_menu()
+                main_menu()
 
-        break
 
 
 def login_menu():
@@ -103,46 +100,39 @@ def login_menu():
         print('Invalid email or password. Please try again.')
 
 
-def competency_menu():
+# def competency_menu():
 
-    competencies = get_all_competencies()
+#     competencies = get_all_competencies()
 
-    print(f'Name')
-    for i in range(1, len(competencies)):
-        print(f'{1} {competencies[i][1]}')
-    print()
+#     print(f'Name')
+#     for i in range(1, len(competencies)):
+#         print(f'{1} {competencies[i][1]}')
+#     print()
 
-    while True:
-        print('--- Competency Menu ---')
-        print('1. View Competency')
-        print('2. Add Competency')
-        print('Press enter to return to previous menu.')
-        response = input()
+#     while True:
+#         print('--- Competency Menu ---')
+#         print('1. View Competency')
+#         print('2. Add Competency')
+#         print('Press enter to return to previous menu.')
+#         response = input()
+#         print('response' + response)
+       
+#         if not response:
+#             break
+#         elif math.isnan(response):
+#             print(f'Response of: {response} is not valid')
+#             continue
 
-        if not response:
-            break
-        elif math.isnan(response):
-            print(f'Response of: {response} is not valid')
-            continue
-
-        match int(response):
-            case 1:
-                print('View')
-            case 2:
-                print('Add')
-            case _:
-                print('invalid response')
-
-
-def assessment_menu(competency_id):
-    print()
-
-
-def assessment_results_menu(assessment_id, user_id):
-    print()
-
+#         match int(response):
+#             case 1:
+#                 print('View')
+#             case 2:
+#                 print('Add')
+#             case _:
+#                 print('invalid response')
 
 def logout():
+
     logged_in = ()
 
 

@@ -3,7 +3,7 @@ from init import cursor, connection
 
 def view_results(assessment_id, user_id):
      return cursor.execute(
-        'SELECT * FROM AssessmentResults WHERE user_id = ? AND assessment_id = ?',
+        'SELECT * FROM assessment_results WHERE user_id = ? AND assessment_id = ?',
         (user_id, assessment_id)
     ).fetchone()
 
@@ -19,12 +19,13 @@ def add_assessment(assessment, competency_id):
 
 def add_results(assessment_results):
     query = '''
-            INSERT INTO assessment_results (assessment_id, score, date_taken, manager_id)
-            VALUES (?, ?, ?)
+            INSERT INTO assessment_results (assessment_id, score, date_taken, manager_id, user_id)
+            VALUES (?, ?, ?, ?, ?)
             '''
-    values = (assessment_results[1], assessment_results[2],
-              assessment_results[3], assessment_results[4])
-
+    values = (assessment_results.assessment_id[0][0], assessment_results.score[0],
+              assessment_results.date_taken[0], assessment_results.manager_id[0], assessment_results.user_id)
+    print(query)
+    print(values)
     cursor.execute(query, values)
 
 
